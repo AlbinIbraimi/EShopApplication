@@ -31,13 +31,14 @@ namespace EShop.Web.Controllers
             return View(this._productService.GetAllProducts());
         }
 
-        
+        [Authorize]
         public IActionResult AddProductToCard(Guid? id)
         {
             var model = this._productService.GetShoppingCartInfo(id);
             return View(model);
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult AddProductToCard([Bind("ProductId", "Quantity")] AddToShoppingCardDto item)
         {
