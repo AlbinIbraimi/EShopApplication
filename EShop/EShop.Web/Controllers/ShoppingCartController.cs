@@ -24,12 +24,14 @@ namespace EShop.Web.Controllers
 
         public IActionResult Index(string id, string test)
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+           
             if(test!=null && test.Equals("True"))
             {
                 return View(this._shoppingCartService.getShoppingCartInfo(id));
             }
-            else if(userId == null)
+
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if(userId == null)
             {
                 return RedirectToAction("Login", "Account");
             }
