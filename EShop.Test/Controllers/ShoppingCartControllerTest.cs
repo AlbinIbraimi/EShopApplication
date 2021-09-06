@@ -27,15 +27,20 @@ namespace EShop.Test.Controllers
         [Fact]
         public void IndexTest_ReturnsShoppingCartDto()
         {
-            Guid id = Guid.NewGuid();
+            Guid productId = Guid.NewGuid();
             Guid userid = Guid.NewGuid();
             Guid shoppingcartid = Guid.NewGuid();
+            ShoppingCart userCart = new ShoppingCart()
+            {
+                Id = shoppingcartid,
+                OwnerId = userid.ToString()
+            };
 
             var listProducts = new List<ProductInShoppingCart>()
             {
                 new ProductInShoppingCart
                 {
-                    ProductId = id,
+                    ProductId = productId,
                     Product = new Product()
                     {
                         ProductName = "Kafe",
@@ -45,6 +50,7 @@ namespace EShop.Test.Controllers
                     Rating = 10
                     },
                     ShoppingCartId = shoppingcartid,
+                    ShoppingCart = userCart,
                     Quantity = 6
                 }
             };
@@ -57,27 +63,11 @@ namespace EShop.Test.Controllers
 
             _shoppingCartService.Setup(z => z.getShoppingCartInfo(userid.ToString())).Returns(dto);
 
-            var result = _shoppingCartController.Index(id.ToString(), " ");
+            var result = _shoppingCartController.Index(userid.ToString(), "True");
 
             var isViewReuslt = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<ShoppingCartDto>(isViewReuslt.ViewData.Model);
-            Assert.Equal(1, model.Products.Count);
-            //expected , actual
+            Assert.Single(model.Products);
         }
     }
 }
-
-/*
- *  _productService.Setup(m => m.GetShoppingCartInfo(id)).Returns(dto);
-
-            //ACT
-            var result = productsController.AddProductToCard(id);
-
-            //Assert
-            var isViewReuslt = Assert.IsType<ViewResult>(result);
-            var model = Assert.IsAssignableFrom<AddToShoppingCardDto>(isViewReuslt.ViewData.Model);
-            Assert.Equal(model.ProductId, id);
- * 
- * 
- * 
- */

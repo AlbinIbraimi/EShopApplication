@@ -172,6 +172,92 @@ namespace EShop.Test
             var model = Assert.IsAssignableFrom<AddToShoppingCardDto>(isViewResult.ViewData.Model);
 
         }
-        
+        //06.09.2021
+        [Fact]
+        public void CreateTestPost_CreateViewFail()
+        {
+            Guid id = Guid.NewGuid();
+            Product tmp = new Product
+            {
+                Id = id,
+                ProductName = "TestName",
+                ProductDescription = "TestDescription",
+                ProductImage = "SOMEURL",
+                ProductPrice = 200,
+                Rating = 5
+            };
+
+            productsController.ModelState.AddModelError("Description", "This Field Is Required");
+
+            var result = productsController.Create(tmp);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.Equal(tmp, viewResult.ViewData.Model);
+            _productService.Verify(z => z.CreateNewProduct(tmp), Times.Never());
+        }
+
+        [Fact]
+        public void CreateTestPost_RedirectToIndex()
+        {
+            Guid id = Guid.NewGuid();
+            Product tmp = new Product
+            {
+                Id = id,
+                ProductName = "TestName",
+                ProductDescription = "TestDescription",
+                ProductImage = "SOMEURL",
+                ProductPrice = 200,
+                Rating = 5
+            };
+
+            _productService.Setup(z => z.CreateNewProduct(tmp));
+
+            var result = productsController.Create(tmp);
+
+            _productService.Verify(z => z.CreateNewProduct(tmp));
+            var viewResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Index", viewResult.ActionName);
+        }
+
+        [Fact]
+        public void DetailsTest_NoID()
+        {
+            var result = productsController.Details(null);
+
+            var viewResult = Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        public void DetailsTest_NotExist()
+        {
+            Guid id = Guid.NewGuid();
+            _productService.Setup(z => z.GetDetailsForProduct(id));
+
+            var result = productsController.Details(id);
+
+            var viewResult = Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        public void DetailsTest_Exist()
+        {
+            Guid id = Guid.NewGuid();
+            Product tmp = new Product
+            {
+                Id = id,
+                ProductName = "TestName",
+                ProductDescription = "TestDescription",
+                ProductImage = "SOMEURL",
+                ProductPrice = 200,
+                Rating = 5
+            };
+
+            _productService.Setup(z => z.GetDetailsForProduct(id));
+
+            var result = productsController.Details(id);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.Equal(tmp, viewResult.ViewData.Model);
+        }
     }
 }
