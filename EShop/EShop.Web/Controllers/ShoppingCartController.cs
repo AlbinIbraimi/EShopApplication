@@ -24,12 +24,14 @@ namespace EShop.Web.Controllers
 
         public IActionResult Index(string id, string test)
         {
+           
             if(test!=null && test.Equals("True"))
             {
                 return View(this._shoppingCartService.getShoppingCartInfo(id));
             }
+
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
+            if(userId == null)
             {
                 return RedirectToAction("Login", "Account");
             }
@@ -75,10 +77,12 @@ namespace EShop.Web.Controllers
 
         public IActionResult DeleteFromShoppingCart(Guid id, string mockUserId, string test)
         {
+           
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (test != null && test.Equals("True"))
             {
                 var Testresult = this._shoppingCartService.deleteProductFromShoppingCart(mockUserId, id);
+                return RedirectToAction("Index", "Product",mockUserId,"True");
             }
             else
             {
