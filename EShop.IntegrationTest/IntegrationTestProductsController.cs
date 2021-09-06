@@ -79,7 +79,6 @@ namespace EShop.IntegrationTest
 
                 //Arange
                 var result = EnsureAntiforgeryToken();
-                result.Wait();
                 var id = Guid.NewGuid();
 
                 var formData = EnsureAntiforgeryTokenForm(new Dictionary<string, string>
@@ -90,7 +89,7 @@ namespace EShop.IntegrationTest
                 { "ProductImage", "BLABLABLA"},
                 { "ProductPrice", "100"},
                 { "Rating", "100"}
-            }).Result;
+            });
 
                 //ACT
                 var response = _testClient.PostAsync("/Products/Create", new FormUrlEncodedContent(formData)).Result;
@@ -106,7 +105,7 @@ namespace EShop.IntegrationTest
         {
 
             this.RecreateTestServerAndClient();
-            await EnsureAntiforgeryToken();
+            EnsureAntiforgeryToken();
 
 
             //Arange
@@ -120,7 +119,7 @@ namespace EShop.IntegrationTest
                 { "ProductDescription", "Empty"},
                 { "ProductPrice", "0"},
                 { "Rating", "5"}
-            }).Result;
+            });
 
             var response = await _testClient.PostAsync("Products/Create", new FormUrlEncodedContent(productData));
             Assert.Equal(HttpStatusCode.Found, response.StatusCode);
@@ -159,7 +158,6 @@ namespace EShop.IntegrationTest
         {
             this.RecreateTestServerAndClient();
             var tmp = this.EnsureAntiforgeryToken();
-            tmp.Wait();
 
             var product = PredefinedData.products[0];
             
@@ -172,7 +170,7 @@ namespace EShop.IntegrationTest
                 { "ProductImage", product.ProductImage},
                 { "ProductPrice", product.ProductPrice.ToString()},
                 { "Rating", product.Rating.ToString() }
-            }).Result;
+            });
 
             var responseEdit = _testClient.PostAsync($"/Products/Edit/{product.Id}", new FormUrlEncodedContent(data)).Result;
             Assert.Equal(HttpStatusCode.Found, responseEdit.StatusCode);
@@ -189,10 +187,9 @@ namespace EShop.IntegrationTest
         {
             this.RecreateTestServerAndClient();
             var tmp = this.EnsureAntiforgeryToken();
-            tmp.Wait();
 
             var product = PredefinedData.products[0];
-            var formData = this.EnsureAntiforgeryTokenForm().Result;
+            var formData = this.EnsureAntiforgeryTokenForm();
 
             //ACT
             var result = _testClient.PostAsync($"/Products/Delete/{product.Id}", new FormUrlEncodedContent(formData));

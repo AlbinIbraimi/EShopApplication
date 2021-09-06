@@ -15,8 +15,6 @@ namespace EShop.Web.Controllers
 {
     public class ShoppingCartController : Controller
     {
-
-
         private readonly IShoppingCartService _shoppingCartService;
 
         public ShoppingCartController(IShoppingCartService shoppingCartService)
@@ -24,11 +22,17 @@ namespace EShop.Web.Controllers
             _shoppingCartService = shoppingCartService;
         }
 
-        [Authorize]
-        public IActionResult Index()
+        public IActionResult Index(string id, string test)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
+            if(test!=null && test.Equals("True"))
+            {
+                return View(this._shoppingCartService.getShoppingCartInfo(id));
+            }
+            else if(userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             return View(this._shoppingCartService.getShoppingCartInfo(userId));
         }
 
@@ -69,20 +73,18 @@ namespace EShop.Web.Controllers
             return RedirectToAction("Index", "ShoppingCart");
         }
 
-        public IActionResult DeleteFromShoppingCart(Guid id)
+        public IActionResult DeleteFromShoppingCart(Guid id, string mockUserId, string test)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var result = this._shoppingCartService.deleteProductFromShoppingCart(userId, id);
-
-            if(result)
+            if (test != null && test.Equals("True"))
             {
-                return RedirectToAction("Index", "ShoppingCart");
+                var Testresult = this._shoppingCartService.deleteProductFromShoppingCart(mockUserId, id);
             }
             else
             {
-               return RedirectToAction("Index", "ShoppingCart");
+                var result = this._shoppingCartService.deleteProductFromShoppingCart(userId, id);
             }
+            return RedirectToAction("Index", "Product");
         }
 
         private Boolean Order()

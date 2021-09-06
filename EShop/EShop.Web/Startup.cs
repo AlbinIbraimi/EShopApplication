@@ -6,6 +6,7 @@ using EShop.Repository.Interface;
 using EShop.Services;
 using EShop.Services.Implementation;
 using EShop.Services.Interface;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -52,7 +53,7 @@ namespace EShop.Web
             services.AddScoped(typeof(IOrderRepository), typeof(OrderRepository));
 
             services.AddScoped<IUserService, UserService>();
-            
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddHttpContextAccessor();
             //services.AddScoped<EmailSettings>(es => emailService);

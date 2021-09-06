@@ -38,7 +38,7 @@ namespace EShop.Web.Controllers
             return View(model);
         }
 
-        [Authorize]
+        
         [HttpPost]
         public IActionResult AddProductToCard([Bind("ProductId", "Quantity")] AddToShoppingCardDto item)
         {

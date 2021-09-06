@@ -76,11 +76,11 @@ namespace EShop.IntegrationTest
             _context.Database.EnsureCreated();
             _seeder.Seed().Wait();
         }
-        protected async Task<string> EnsureAntiforgeryToken()
+        protected string EnsureAntiforgeryToken()
         {
             if (_antiforgeryToken != null) return _antiforgeryToken;
 
-            var response = await _testClient.GetAsync("/Account/Login");
+            var response =  _testClient.GetAsync("/Account/Login").Result;
             response.EnsureSuccessStatusCode();
             if (response.Headers.TryGetValues("Set-Cookie", out IEnumerable<string> values))
             {
@@ -89,7 +89,7 @@ namespace EShop.IntegrationTest
             Assert.NotNull(_antiforgeryCookie);
             _testClient.DefaultRequestHeaders.Add("Cookie", new CookieHeaderValue(_antiforgeryCookie.Name, _antiforgeryCookie.Value).ToString());
 
-            var responseHtml = await response.Content.ReadAsStringAsync();
+            var responseHtml =  response.Content.ReadAsStringAsync().Result;
             var match = AntiforgeryFormFieldRegex.Match(responseHtml);
             _antiforgeryToken = match.Success ? match.Groups[1].Captures[0].Value : null;
             Assert.NotNull(_antiforgeryToken);
@@ -97,28 +97,32 @@ namespace EShop.IntegrationTest
             return _antiforgeryToken;
         }
 
-        protected async Task<Dictionary<string, string>> EnsureAntiforgeryTokenForm(Dictionary<string, string> formData = null)
+        protected Dictionary<string, string> EnsureAntiforgeryTokenForm(Dictionary<string, string> formData = null)
         {
             if (formData == null) formData = new Dictionary<string, string>();
 
-            formData.Add("__RequestVerificationToken", await EnsureAntiforgeryToken());
+            formData.Add("__RequestVerificationToken",  EnsureAntiforgeryToken());
             return formData;
         }
 
-        public async Task EnsureAuthenticationCookie()
+        public void EnsureAuthenticationCookie()
         {
             if (_authenticationCookie != null) return;
 
-            var formData = await EnsureAntiforgeryTokenForm(new Dictionary<string, string>
+            var formData =  EnsureAntiforgeryTokenForm(new Dictionary<string, string>
     {
         { "Email", PredefinedData.users[0].Email },
         { "Password", PredefinedData.password }
     });
-            var response = await _testClient.PostAsync("/Account/Login", new FormUrlEncodedContent(formData));
+            var response = _testClient.PostAsync("/Account/Login", new FormUrlEncodedContent(formData)).Result;
             //Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
 
             if (response.Headers.TryGetValues("Set-Cookie", out IEnumerable<string> values))
             {
+                foreach(var value in values)
+                {
+                    Console.WriteLine("----" + value.ToString());
+                }
                 _authenticationCookie = SetCookieHeaderValue.ParseList(values.ToList()).SingleOrDefault(c => c.Name.StartsWith("AUTHENTICATION_COOKIE", StringComparison.InvariantCultureIgnoreCase));
             }
             Assert.NotNull(_authenticationCookie);
