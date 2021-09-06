@@ -33,15 +33,13 @@ namespace EShop.IntegrationTest
             this.RecreateTestServerAndClient();
             //ARANGE
             var userId = PredefinedData.users[0].Id;
-            var productId = PredefinedData.products[0].Id; // id od productInShopingCart relacijata ne od produktot
-            
-            var result = _testClient.GetAsync($"/ShoppingCart/DeleteFromShoppingCart?id={productId.ToString()}&mockUserId={userId.ToString()}&test=True").Result;
-            Assert.Equal(HttpStatusCode.Found, result.StatusCode);
+            var productToDeleteId = PredefinedData.products[0].Id;
 
-            var checkUserCart = _testClient.GetAsync($"/ShoppingCart/Index?id={userId.ToString()}&test={true.ToString()}").Result;
-            var responseString = checkUserCart.Content.ReadAsStringAsync().Result;
-            var userCart = PredefinedData.users[0].UserCart.ProductInShoppingCarts.ToList();
-            Assert.DoesNotContain($"<td product-id=\"{PredefinedData.products[0].Id}\">{PredefinedData.products[0].ProductName}</td>", responseString);
+            var result = _testClient.GetAsync($"/ShoppingCart/DeleteFromShoppingCart?id={productToDeleteId.ToString()}&mockUserId={userId.ToString()}&test=True").Result;
+            var resultToSTring = result.Content.ReadAsStringAsync().Result;
+            Assert.Equal(HttpStatusCode.Found, result.StatusCode);
+            Assert.DoesNotContain($"<td product-id=\"{PredefinedData.products[0].Id}\">{PredefinedData.products[0].ProductName}</td>", resultToSTring);
         }
+
     }
 }

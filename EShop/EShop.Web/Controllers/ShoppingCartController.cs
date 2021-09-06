@@ -75,10 +75,12 @@ namespace EShop.Web.Controllers
 
         public IActionResult DeleteFromShoppingCart(Guid id, string mockUserId, string test)
         {
+           
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (test != null && test.Equals("True"))
             {
                 var Testresult = this._shoppingCartService.deleteProductFromShoppingCart(mockUserId, id);
+                return RedirectToAction("Index", "Product",mockUserId,"True");
             }
             else
             {
