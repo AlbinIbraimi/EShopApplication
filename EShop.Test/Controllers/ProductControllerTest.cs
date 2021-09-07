@@ -252,7 +252,7 @@ namespace EShop.Test
                 Rating = 5
             };
 
-            _productService.Setup(z => z.GetDetailsForProduct(id));
+            _productService.Setup(z => z.GetDetailsForProduct(id)).Returns(tmp);
 
             var result = productsController.Details(id);
 
