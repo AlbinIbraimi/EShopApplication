@@ -1,5 +1,6 @@
 ﻿using EShop.Domain.Idenitity;
 using EShop.Repository.Interface;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,12 +12,14 @@ namespace EShop.Repository.Implementation
     public class UserRepository : IUserRepository
     {
         private readonly ApplicationDbContext context;
+        private readonly UserManager<EShopApplicationUser> _userManager;
         private DbSet<EShopApplicationUser> entities;
         string errorMessage = string.Empty;
 
-        public UserRepository(ApplicationDbContext context)
+        public UserRepository(ApplicationDbContext context, UserManager<EShopApplicationUser> userManager)
         {
             this.context = context;
+            this._userManager = userManager;
             entities = context.Set<EShopApplicationUser>();
         }
         public IEnumerable<EShopApplicationUser> GetAll()
@@ -60,6 +63,16 @@ namespace EShop.Repository.Implementation
             }
             entities.Remove(entity);
             context.SaveChanges();
+        }
+
+        public EShopApplicationUser findByEmail(string email)
+        {
+            return _userManager.FindByEmailAsync(email).Result;
+        }
+
+        public IdentityResult createUser(EShopApplicationUser user, string password)
+        {
+            return _userManager.CreateAsync(user, password).Result;
         }
     }
 }

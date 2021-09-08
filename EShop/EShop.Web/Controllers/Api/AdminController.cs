@@ -1,5 +1,6 @@
 ﻿using EShop.Domain.DomainModels;
 using EShop.Domain.Idenitity;
+using EShop.Repository.Interface;
 using EShop.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -17,12 +18,12 @@ namespace EShop.Web.Controllers.Api
     {
 
         private readonly IOrderService _orderService;
-        private readonly UserManager<EShopApplicationUser> userManager;
+        private readonly IUserRepository _userRepository;
 
-        public AdminController(IOrderService orderService, UserManager<EShopApplicationUser> userManager)
+        public AdminController(IOrderService orderService, IUserRepository userRepository)
         {
             this._orderService = orderService;
-            this.userManager = userManager;
+            this._userRepository = userRepository;
         }
 
         [HttpGet("[action]")]
@@ -44,7 +45,7 @@ namespace EShop.Web.Controllers.Api
 
             foreach (var item in model)
             {
-                var userCheck = userManager.FindByEmailAsync(item.Email).Result;
+                var userCheck = _userRepository.findByEmail(item.Email);
                 
                 if(userCheck == null)
                 {
@@ -57,7 +58,7 @@ namespace EShop.Web.Controllers.Api
                         PhoneNumberConfirmed = true,
                         UserCart = new ShoppingCart()
                     };
-                    var result = userManager.CreateAsync(user, item.Password).Result;
+                    var result = _userRepository.createUser(user, item.Password);
 
                     status = status && result.Succeeded;
                 }
