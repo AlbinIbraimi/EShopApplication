@@ -16,9 +16,10 @@ namespace EShop.Repository.Implementation
         private DbSet<EShopApplicationUser> entities;
         string errorMessage = string.Empty;
 
-        public UserRepository(ApplicationDbContext context)
+        public UserRepository(ApplicationDbContext context, UserManager<EShopApplicationUser> userManager)
         {
             this.context = context;
+            this._userManager = userManager;
             entities = context.Set<EShopApplicationUser>();
         }
         public IEnumerable<EShopApplicationUser> GetAll()
