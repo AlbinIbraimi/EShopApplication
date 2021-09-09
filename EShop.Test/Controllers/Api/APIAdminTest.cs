@@ -26,7 +26,7 @@ namespace EShop.Test.Controllers.Api
             this._userRepository = new Mock<IUserRepository>();
             this.adminController = new AdminController(_orderService.Object, _userRepository.Object);
         }
-
+        
         [Fact]
         public void GetOrders_Test()
         {
