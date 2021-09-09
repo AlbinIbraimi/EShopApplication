@@ -4,6 +4,7 @@ using EShop.Repository.Interface;
 using EShop.Services.Interface;
 using EShop.Web.Controllers.Api;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -49,6 +50,26 @@ namespace EShop.Test.Controllers.Api
             var result = adminController.GetOrders();
 
             Assert.Equal(orders, result);
+        }
+
+        [Fact]
+        public void DetailsTestAPI()
+        {
+            var id = Guid.NewGuid();
+            var id1 = Guid.NewGuid();
+
+            Order order = new Order()
+            {
+                Id = id,
+                ProductInOrders = null,
+                User = null,
+                UserId = id1.ToString()
+            };
+
+            _orderService.Setup(z => z.getOrderDetails(order));
+
+            var result = adminController.GetDetailsForProduct(order);
+            var viewResult = Assert.IsType<NotFoundResult>(result);
         }
     }
 }

@@ -46,8 +46,8 @@ namespace EShop.Web.Controllers.Api
             foreach (var item in model)
             {
                 var userCheck = _userRepository.findByEmail(item.Email);
-                
-                if(userCheck == null)
+
+                if (userCheck == null)
                 {
                     var user = new EShopApplicationUser
                     {
