@@ -69,5 +69,42 @@ namespace EShop.Test.Controllers
             var model = Assert.IsAssignableFrom<ShoppingCartDto>(isViewReuslt.ViewData.Model);
             Assert.Single(model.Products);
         }
+
+        [Fact]
+        public void DeleteFromShoppingCart_Test()
+        {
+
+            Guid productId = Guid.NewGuid();
+            Guid userid = Guid.NewGuid();
+            Guid shoppingcartid = Guid.NewGuid();
+            //ShoppingCart userCart = new ShoppingCart()
+            //{
+            //    Id = shoppingcartid,
+            //    OwnerId = userid.ToString()
+            //};
+
+            //var listProducts = new List<ProductInShoppingCart>()
+            //{
+            //    new ProductInShoppingCart
+            //    {
+            //        ProductId = productId,
+            //        Product = new Product()
+            //        {
+            //            ProductName = "Kafe",
+            //        ProductImage = "https://image.shutterstock.com/image-photo/cappuccino-milk-coffee-bean-on-260nw-791935171.jpg",
+            //        ProductDescription = "Malo makiato so izobilni vkusovi na zrno tursko kafe",
+            //        ProductPrice = 120,
+            //        Rating = 10
+            //        },
+            //        ShoppingCartId = shoppingcartid,
+            //        ShoppingCart = userCart,
+            //        Quantity = 6
+            //    }
+            //};
+
+            _shoppingCartService.Setup(z => z.deleteProductFromShoppingCart(userid.ToString(), productId));
+            var result = _shoppingCartController.Index(userid.ToString(), "True");
+
+        }
     }
 }

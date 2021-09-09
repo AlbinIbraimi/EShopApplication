@@ -53,6 +53,7 @@ namespace EShop.Web
             services.AddScoped(typeof(IOrderRepository), typeof(OrderRepository));
 
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddHttpContextAccessor();
