@@ -14,7 +14,6 @@ namespace EShop.IntegrationTest
 {
     public class IntegrationTestProductsController : InitializationIntegrationTestClass
     {
-        
         [Fact]
         public void Test_Server_Client_InMemoryDatabase() 
         {

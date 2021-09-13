@@ -13,11 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EShop.Services", "EShop\ESh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EShop.Domain", "EShop\EShop.Domain\EShop.Domain.csproj", "{EBBCCD0D-874E-4532-98A1-CFACE36535E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EShop.Test", "EShop.Test\EShop.Test.csproj", "{B01F06DB-C253-406F-A498-BF7158FB12EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EShop.Test", "EShop.Test\EShop.Test.csproj", "{B01F06DB-C253-406F-A498-BF7158FB12EF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{EDCBBB9C-864E-4BC7-88C0-827A65418064}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EShop.IntegrationTest", "EShop.IntegrationTest\EShop.IntegrationTest.csproj", "{D16AFFAD-D6CD-4A9D-A747-81E334AAFE25}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EShop.IntegrationTest", "EShop.IntegrationTest\EShop.IntegrationTest.csproj", "{D16AFFAD-D6CD-4A9D-A747-81E334AAFE25}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
