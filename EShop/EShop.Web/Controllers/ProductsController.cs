@@ -31,9 +31,17 @@ namespace EShop.Web.Controllers
             return View(this._productService.GetAllProducts());
         }
 
-        [Authorize]
+        private bool IsUserLoggedIn() 
+        {
+            return !(_userService.GetUserId() == null);
+        }
+
         public IActionResult AddProductToCard(Guid? id)
         {
+            if (! IsUserLoggedIn())
+            {
+                return RedirectToAction("login", "Account");
+            }
             var model = this._productService.GetShoppingCartInfo(id);
             return View(model);
         }
@@ -74,9 +82,13 @@ namespace EShop.Web.Controllers
         }
 
         // GET: Products/Create
-        [Authorize]
+
         public IActionResult Create()
         {
+            if(! IsUserLoggedIn())
+            {
+                return RedirectToAction("login", "Account");
+            }
             return View();
         }
 

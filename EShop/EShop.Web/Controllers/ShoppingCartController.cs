@@ -88,7 +88,7 @@ namespace EShop.Web.Controllers
             {
                 var result = this._shoppingCartService.deleteProductFromShoppingCart(userId, id);
             }
-            return RedirectToAction("Index", "Product");
+            return RedirectToAction("Index", "Products");
         }
 
         private Boolean Order()
