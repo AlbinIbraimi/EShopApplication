@@ -2,6 +2,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using System;
+using System.IO;
 using System.Threading;
 using Xunit;
 
@@ -16,7 +17,8 @@ namespace EshopApplicationEndToEndTest
         {
             ChromeOptions options = new ChromeOptions();
             options.AcceptInsecureCertificates = true;
-            this.driver = new ChromeDriver(@"C:\Users\Albin\Desktop\Finki\SKIT\Proekt\EshopApplicationEndToEndTest\EshopApplicationEndToEndTest\ChromDriver\", options);
+            var pathFile = Directory.GetCurrentDirectory().Replace("bin\\Debug\\net5.0", "ChromDriver");
+            this.driver = new ChromeDriver(pathFile, options);
         }
 
         [Fact]
